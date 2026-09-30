@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Praça — sua vizinhança online</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF3F1;--surface:#fff;--ink:#14232B;--muted:#5D6F78;--line:#DCE5E2;--brand:#0E7C66;--brand-d:#0A5E4D;--sun:#FFC93C}
+*{box-sizing:border-box;margin:0}
+body{font:16px/1.5 Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+h2,.logo{font-family:"Bricolage Grotesque",system-ui,sans-serif}
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:16px;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:22px;color:var(--brand);text-decoration:none}
+.search{flex:1;max-width:420px;margin:0 auto;padding:9px 16px;border:1px solid var(--line);border-radius:999px;background:var(--bg);font:inherit}
+.enter,.btn{border:0;border-radius:999px;padding:8px 18px;background:var(--brand);color:#fff;font:500 15px Inter,sans-serif;text-decoration:none;cursor:pointer}
+.enter:hover,.btn:hover{background:var(--brand-d)}
+.wrap{max-width:1080px;margin:20px auto;padding:0 16px;display:grid;grid-template-columns:190px minmax(0,1fr) 260px;gap:20px;align-items:start}
+.side-l,.side-r{position:sticky;top:76px}
+ul{list-style:none;padding:0}
+.side-l a{display:block;padding:10px 14px;border-radius:10px;color:var(--ink);text-decoration:none;font-weight:500}
+.side-l a:hover{background:#DDE9E5}
+.side-l a[aria-current]{background:var(--brand);color:#fff}
+.composer,.post,.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.composer textarea{width:100%;border:0;resize:none;font:inherit;outline:0}
+.composer div{display:flex;justify-content:flex-end;align-items:center;gap:12px;color:var(--muted);font-size:14px}
+.post header,.side-r li{display:flex;align-items:center;gap:10px}
+.av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;flex:none}
+.post b{display:block;line-height:1.2}
+.post small{color:var(--muted)}
+.post p{margin:12px 0;overflow-wrap:anywhere}
+.like,.follow{border:1px solid var(--line);background:none;border-radius:999px;padding:5px 14px;font:inherit;font-size:14px;cursor:pointer;color:var(--muted)}
+.like.on,.follow.on{background:var(--sun);border-color:var(--sun);color:var(--ink)}
+.side-r h2{font-size:17px;margin-bottom:6px}
+.side-r li{padding:7px 0}
+.side-r li span{flex:1}
+.side-r .topics li{display:block;color:var(--muted);font-size:15px}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.sr{position:absolute;left:-9999px}
+@media(max-width:900px){
+ .wrap{grid-template-columns:minmax(0,1fr)}
+ .side-r{display:none}
+ .side-l{position:static}
+ .side-l ul{display:flex;gap:6px;overflow-x:auto}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="index.html">
+    <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="8" fill="#0E7C66"/><circle cx="14" cy="14" r="6" fill="#FFC93C"/></svg>
+    Praça
+  </a>
+  <input class="search" type="search" placeholder="Buscar pessoas e assuntos" aria-label="Buscar">
+  <a id="who" class="enter" href="login.html">Entrar</a>
+</header>
+
+<div class="wrap">
+  <nav class="side-l" aria-label="Principal">
+    <ul>
+      <li><a href="#" aria-current="page">Início</a></li>
+      <li><a href="#">Explorar</a></li>
+      <li><a href="#">Mensagens</a></li>
+      <li><a href="#">Eventos</a></li>
+      <li><a href="#">Perfil</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <form class="composer" id="composer">
+      <label class="sr" for="txt">Nova publicação</label>
+      <textarea id="txt" rows="2" maxlength="280" placeholder="O que está acontecendo no seu bairro?"></textarea>
+      <div><span id="count">280</span><button class="btn">Publicar</button></div>
+    </form>
+    <section id="feed" aria-label="Publicações"></section>
+  </main>
+
+  <aside class="side-r">
+    <div class="box">
+      <h2>Perto de você</h2>
+      <ul>
+        <li><i class="av" style="background:#3B5BDB">B</i><span>Biblioteca Central</span><button class="follow">Seguir</button></li>
+        <li><i class="av" style="background:#B5179E">P</i><span>Padaria Trigo &amp; Cia</span><button class="follow">Seguir</button></li>
+        <li><i class="av" style="background:#E07A00">C</i><span>Clube de Corrida</span><button class="follow">Seguir</button></li>
+      </ul>
+    </div>
+    <div class="box">
+      <h2>Assuntos do bairro</h2>
+      <ul class="topics">
+        <li>Feira de domingo</li>
+        <li>Mutirão de limpeza da praça</li>
+        <li>Obras na Rua das Acácias</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<script>
+const cores = ['#0E7C66', '#3B5BDB', '#B5179E', '#E07A00'];
+const feed = document.getElementById('feed');
+
+// Cria uma publicação. Os textos vindos do usuário entram com textContent
+// (e não innerHTML), o que impede a injeção de código HTML/JS (XSS).
+function criarPost(nome, texto, curtidas, tempo) {
+  const art = document.createElement('article');
+  art.className = 'post';
+  art.innerHTML = `
+    <header><i class="av"></i><div><b></b><small></small></div></header>
+    <p></p>
+    <button class="like" aria-pressed="false">Curtir · <span></span></button>`;
+  const av = art.querySelector('.av');
+  av.textContent = nome[0].toUpperCase();
+  av.style.background = cores[nome.charCodeAt(0) % cores.length];
+  art.querySelector('b').textContent = nome;
+  art.querySelector('small').textContent = tempo;
+  art.querySelector('p').textContent = texto;
+  const like = art.querySelector('.like');
+  like.dataset.base = curtidas;
+  like.querySelector('span').textContent = curtidas;
+  return art;
+}
+
+[
+  ['Marina Alves', 'A feira da Rua das Acácias começa às 7h neste domingo. Chegou pitaya, e o pastel do seu Jorge continua imbatível.', 24, 'há 12 min'],
+  ['Horta Viva', 'Precisamos de voluntários para regar a horta comunitária na quinta-feira. Levem garrafas e boa vontade.', 9, 'há 1 h'],
+  ['Rafael Nunes', 'Alguém sabe se a biblioteca vai abrir no feriado?', 3, 'há 3 h']
+].forEach(p => feed.append(criarPost(...p)));
+
+// Curtir e seguir (delegação de eventos: um único listener para tudo)
+document.addEventListener('click', e => {
+  const like = e.target.closest('.like');
+  if (like) {
+    const on = like.classList.toggle('on');
+    like.setAttribute('aria-pressed', on);
+    like.querySelector('span').textContent = +like.dataset.base + (on ? 1 : 0);
+  }
+  const seg = e.target.closest('.follow');
+  if (seg) {
+    const on = seg.classList.toggle('on');
+    seg.textContent = on ? 'Seguindo' : 'Seguir';
+  }
+});
+
+// Nova publicação
+const txt = document.getElementById('txt'), count = document.getElementById('count');
+txt.addEventListener('input', () => count.textContent = 280 - txt.value.length);
+
+// "Sessão" de demonstração vinda da página de login
+let usuario = 'Você';
+try {
+  const email = sessionStorage.getItem('praca_user');
+  if (email) {
+    usuario = email.split('@')[0];
+    document.getElementById('who').textContent = 'Olá, ' + usuario;
+  }
+} catch (_) {}
+
+document.getElementById('composer').addEventListener('submit', e => {
+  e.preventDefault();
+  const t = txt.value.trim();
+  if (!t) return;
+  feed.prepend(criarPost(usuario, t, 0, 'agora'));
+  txt.value = '';
+  count.textContent = 280;
+});
+</script>
+</body>
+</html>
